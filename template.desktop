@@ -3,6 +3,3 @@ Encoding=UTF-8
 Version=1.0
 Type=Application
 Terminal=false
-Exec=exec_path 
-Name=app_name
-Icon=icon_path

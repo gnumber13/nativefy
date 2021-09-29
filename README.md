@@ -1,3 +1,3 @@
 # Nativefy
 
- [Nativefier](https://github.com/nativefier/nativefier) desktop integration for the Linux Desktop
+Linux Desktop integration for [Nativefier](https://github.com/nativefier/nativefier) 

@@ -5,7 +5,27 @@ source ./nativefy.conf
 system_el_version=$(electron -v | cut -c2-)
 npm_el_version=$(npm list electron | grep electron | cut -d'@' -f2)
 
-[ $electron_version == default ] && build_el_version=$system_el_version || build_el_version=$npm_el_version
+#[ $electron_version == default ] && build_el_version=$system_el_version || build_el_version=$npm_el_version
+#[ $electron_version == system ] && build_el_version=$system_el_version
+#[ $electron_version == npm ] && build_el_version=$npm_el_version
+
+
+case $electron_version in
+    default)
+        [ $system_el_version == '' ] && build_el_version=$npm_el_version \
+            || build_el_version=$system_el_version
+        ;;
+    system)
+        build_el_version=$system_el_version
+        ;;
+    npm)
+        build_el_version=$npm_el_version
+        ;;
+    *)
+        echo "custom electron versions are unsupported right now"
+        exit
+        ;;
+esac
 
 echo "Packaging with electron v$build_el_version"
 
@@ -23,7 +43,8 @@ cd $webapps_folder
 
 nativefier -u $user_agent_str -e $build_el_version -n "$webapp_name" $webaddress
 
-cd "$webapp_name-linux*" || echo "duplicates detectet"
+cd "$webapp_name"-linux* || echo "duplicates detectet"
+echo $(pwd)
 
 startup_wm_class="$(cat resources/app/package.json | jq .name | cut -d"\"" -f2)"
 exec_path="$(pwd)/$webapp_name"
@@ -33,6 +54,5 @@ echo "Exec=$exec_path" >> $output_desktop_file
 echo "Name=$webapp_display_name" >> $output_desktop_file
 echo "Icon=$icon_path" >> $output_desktop_file
 echo "StartupWMClass=$wm_class" >> $output_desktop_file
-
 
 #cp $output_desktop_file ~/.local/share/applications/$webapp_name.desktop

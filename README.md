@@ -4,8 +4,8 @@ Linux Desktop integration for [Nativefier](https://github.com/nativefier/nativef
 
 ## Dependencies
 
-```
-npm, nativefier, electron (system or via npm)
-```
+* npm
+* nativefier
+* electron (system or via npm)
 
 

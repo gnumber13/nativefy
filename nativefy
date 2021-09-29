@@ -1,0 +1,36 @@
+#!/bin/sh
+
+echo "please enter webaddress:"
+read webaddress
+
+echo "please enter a name:"
+read webapp_display_name
+
+webapp_name=$(echo $webapp_display_name | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
+
+#webaddress=https://web.whatsapp.com
+#webaddress=myip.com
+
+#webapp_name="testwebapp"
+output_desktop_file="$webapp_name.desktop"
+os_arch_name="linux-x64"
+
+cd ~/.local/webapps/
+
+#nativefier -u  "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.46	 Safari/537.36" -e 15.0.0 -n $webapp_name $webaddress
+nativefier -u edge -e 15.0.0 -n "$webapp_name" $webaddress
+
+cd "$webapp_name-$os_arch_name"
+wm_class="$(cat resources/app/package.json | jq .name | cut -d"\"" -f2)"
+exec_path="$(pwd)/$webapp_name"
+icon_path="$(pwd)/resources/app/icon.png"
+
+cat ~/.local/bin/template.desktop > tmp.desktop 
+
+sed "s|exec_path|$exec_path|" tmp.desktop | \
+    sed "s|app_name|$webapp_display_name|" |\
+    sed "s|icon_path|$icon_path|" > $output_desktop_file
+
+echo "StartupWMClass=$wm_class" >> $output_desktop_file
+
+cp $output_desktop_file ~/.local/share/applications/$webapp_name.desktop

@@ -1,58 +1,55 @@
 #!/bin/sh
 
+source ./units.sh
+# u1 source configs
 source ./nativefy.conf
 
-system_el_version=$(electron -v | cut -c2-)
-npm_el_version=$(npm list electron | grep electron | cut -d'@' -f2)
 
-#[ $electron_version == default ] && build_el_version=$system_el_version || build_el_version=$npm_el_version
-#[ $electron_version == system ] && build_el_version=$system_el_version
-#[ $electron_version == npm ] && build_el_version=$npm_el_version
-
-
-case $electron_version in
-    default)
-        [ $system_el_version == '' ] && build_el_version=$npm_el_version \
-            || build_el_version=$system_el_version
-        ;;
-    system)
-        build_el_version=$system_el_version
-        ;;
-    npm)
-        build_el_version=$npm_el_version
-        ;;
-    *)
-        echo "custom electron versions are unsupported right now"
-        exit
-        ;;
-esac
+# *u3 cases for electron_version setting in config file
+get_build_electron_version $electron_version
 
 echo "Packaging with electron v$build_el_version"
 
-echo "please enter webaddress:"
-read webaddress
+# *u4a get webaddress from user
+#echo "please enter webaddress:"
+#read webaddress
 
-echo "please enter a name:"
-read webapp_display_name
+webaddress=$1
 
-webapp_name=$(echo $webapp_display_name | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
+[ $(is_webpage_up $webaddress) == "false" ] && exit
+
+# *u4b get display name from user
+#echo "please enter a name:"
+#read webapp_display_name
+
+webapp_display_name=$2
+
+# *u5 convert webapp_name to lower case and replace spaces with underscore
+#webapp_name=$(echo $webapp_display_name | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
+to_lower_and_snake_case $webapp_display_name
+
+# u6 set name of .desktop file
 output_desktop_file="$webapp_name.desktop"
 
 # sourced from nativefy.conf
 cd $webapps_folder
 
+# u7 execute nativefier command
 nativefier -u $user_agent_str -e $build_el_version -n "$webapp_name" $webaddress
 
+# u8 change to webapps directory
 cd "$webapp_name"-linux* || echo "duplicates detectet"
-echo $(pwd)
 
+# u9 set variables for the .desktop file
 startup_wm_class="$(cat resources/app/package.json | jq .name | cut -d"\"" -f2)"
 exec_path="$(pwd)/$webapp_name"
 icon_path="$(pwd)/resources/app/icon.png"
 
+# u10 append lines to .desktop file
 echo "Exec=$exec_path" >> $output_desktop_file
 echo "Name=$webapp_display_name" >> $output_desktop_file
 echo "Icon=$icon_path" >> $output_desktop_file
 echo "StartupWMClass=$wm_class" >> $output_desktop_file
 
+# u11 copy .desktop file to desired location
 #cp $output_desktop_file ~/.local/share/applications/$webapp_name.desktop

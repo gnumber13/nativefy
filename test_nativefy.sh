@@ -23,7 +23,7 @@ result="$(get_build_electron_version system)"
 @test "test get electron version to build npm" {
 result="$(get_build_electron_version npm)"
   echo $result
-  [ "$result" == "15.0.0" ]
+  [ "$result" == "15.1.0" ]
 }
 
 @test "test get electron version to build other" {
@@ -55,7 +55,7 @@ rm tmp1.json
 @test "creating a .desktop file, testing if created" {
 mkdir -p webapps
 mkdir -p webapps/testwebapp-linux-x64
-echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/test_package.json
+echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/package.json
 
 start_path=$(pwd)
 create_desktop_file "Test Webapp" testwebapp
@@ -71,7 +71,7 @@ rm -r webapps/testwebapp-linux-x64
 @test "creating a .desktop file, testing if successfully written to" {
 mkdir -p webapps
 mkdir -p webapps/testwebapp-linux-x64
-echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/test_package.json
+echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/package.json
 
 start_path=$(pwd)
 create_desktop_file "Test Webapp" testwebapp

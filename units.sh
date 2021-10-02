@@ -11,7 +11,7 @@ get_build_electron_version()
 {
     # get npm and system electron versions
     system_el_version=$(electron -v | cut -c2-)
-    npm_el_version=$(npm list electron | grep electron | cut -d'@' -f2)
+    npm_el_version=$(npm list electron | grep electron | cut -d'@' -f2 | cut -d' ' -f1)
 
     case $1 in
         default)
@@ -54,11 +54,14 @@ create_desktop_file(){
     webapp_display_name=$1 
     webapp_name=$2
 
+    echo "$(pwd) <----"
+    echo "webapps/"$webapp_name"-linux*"
     cd webapps/"$webapp_name"-linux* || echo "duplicates detectet"
+    echo "$(pwd) <---"
     cat ../../template.desktop > "$webapp_name".desktop
 
     # set variables for the .desktop file
-    startup_wm_class=$(get_wm_class test_package.json)
+    startup_wm_class=$(get_wm_class resources/app/package.json)
     exec_path="$(pwd)/$webapp_name"
     icon_path="$(pwd)/resources/app/icon.png"
 

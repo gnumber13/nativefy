@@ -18,13 +18,9 @@ webapp_display_name=$2
 get_build_electron_version $electron_version
 echo "Packaging with electron v$build_el_version"
 
-
-# sourced from nativefy.conf
-cd $webapps_folder
-
 # execute nativefier command
 webapp_name=$(to_lower_and_snake_case $webapp_display_name)
-nativefier -u $user_agent_str -e $build_el_version -n "$webapp_name" $webaddress
+nativefier -u $user_agent_str -e $build_el_version -n "$webapp_name" $webaddress $webapps_folder
 
 create_desktop_file $webapp_display_name $webapp_name
 

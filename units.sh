@@ -38,9 +38,7 @@ is_webpage_up() {
 }
 
 write_to_template() {
-    
     desktop_file="$1.desktop"
-
     echo "Name=$2" >> $desktop_file
     echo "Exec=$3" >> $desktop_file
     echo "Icon=$4" >> $desktop_file
@@ -52,15 +50,12 @@ get_wm_class(){
 }
 
 create_desktop_file(){
-## creates desktop file for newly created webapp, webapp name in snake cases ##    
-    # change to webapps directory
-
+    ## creates desktop file for newly created webapp, takes webapp display name (capitalized with spaces if you like) ##    
     webapp_display_name=$1 
-    webapp_name=$(to_lower_and_snake_case $webapp_display_name)
+    webapp_name=$2
 
     cd webapps/"$webapp_name"-linux* || echo "duplicates detectet"
     cat ../../template.desktop > "$webapp_name".desktop
-
 
     # set variables for the .desktop file
     startup_wm_class=$(get_wm_class test_package.json)
@@ -68,6 +63,12 @@ create_desktop_file(){
     icon_path="$(pwd)/resources/app/icon.png"
 
     #write_to_template $1 $exec_path $webapp_display_name $icon_path $startup_wm_class
-    write_to_template $webapp_name $webapp_display_name $exec_path $icon_path $startup_wm_class
+    write_to_template $webapp_name "$webapp_display_name" $exec_path $icon_path $startup_wm_class
+}
 
+copy_desktop_file_to_directory(){
+    cp $1 $2
+}
+create_symlink_to_user_path(){
+    ln -s $1 $2
 }

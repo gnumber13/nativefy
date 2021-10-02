@@ -18,17 +18,17 @@ webapp_display_name=$2
 get_build_electron_version $electron_version
 echo "Packaging with electron v$build_el_version"
 
-to_lower_and_snake_case $webapp_display_name
-
 
 # sourced from nativefy.conf
 cd $webapps_folder
 
 # execute nativefier command
+webapp_name=$(to_lower_and_snake_case $webapp_display_name)
 nativefier -u $user_agent_str -e $build_el_version -n "$webapp_name" $webaddress
 
-create_desktop_file $webapp_display_name
-
+create_desktop_file $webapp_display_name $webapp_name
 
 # u11 copy .desktop file to desired location
-#cp $desktop_file ~/.local/share/applications/$webapp_name.desktop
+copy_desktop_file_to_directory $desktop_file ~/.local/share/applications/
+
+#create_symlink_to_user_path $webapp_name $user_path_directory

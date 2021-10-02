@@ -58,7 +58,7 @@ mkdir -p webapps/testwebapp-linux-x64
 echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/test_package.json
 
 start_path=$(pwd)
-create_desktop_file testwebapp
+create_desktop_file "Test Webapp" testwebapp
 cd $start_path
 
 result="$(cat webapps/testwebapp-linux-x64/testwebapp.desktop > /dev/null && echo true || echo false)"
@@ -74,13 +74,33 @@ mkdir -p webapps/testwebapp-linux-x64
 echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/test_package.json
 
 start_path=$(pwd)
-create_desktop_file testwebapp
+create_desktop_file "Test Webapp" testwebapp
 cd $start_path
 
 result="$(cat webapps/testwebapp-linux-x64/testwebapp.desktop | grep testdata > /dev/null && echo true || echo false)"
 echo $result
 
-rm -r webapps/testwebapp-linux-x64
+#rm -r webapps/testwebapp-linux-x64
 
 [ "$result" == "true" ]
+}
+
+@test "test copying of .desktop file" {
+echo test > tmp.desktop
+copy_desktop_file_to_directory tmp.desktop ~/.local/share/applications/
+result="$(cat ~/.local/share/applications/tmp.desktop)"
+rm tmp.desktop ~/.local/share/applications/tmp.desktop
+  echo $result
+  [ "$result" == "test" ]
+}
+
+
+@test "test creating symlink" {
+echo "echo test" > tmp.sh
+chmod +x tmp.sh
+create_symlink_to_user_path tmp.sh ~/.local/bin/tmp.sh
+result="$(tmp.sh)"
+#rm tmp.sh ~/.local/bin/tmp.sh
+  echo $result
+  [ "$result" == "test" ]
 }

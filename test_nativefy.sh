@@ -44,4 +44,43 @@ result="$(is_webpage_up archlinuxxx.org)"
   [ "$result" == "false" ]
 }
 
+@test "test retrieving json data" {
+echo "{\"name\": \"testdata\"}" > tmp1.json
+result="$(get_wm_class tmp1.json)"
+rm tmp1.json
+  echo $result
+  [ "$result" == "testdata" ]
+}
 
+@test "creating a .desktop file, testing if created" {
+mkdir -p webapps
+mkdir -p webapps/testwebapp-linux-x64
+echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/test_package.json
+
+start_path=$(pwd)
+create_desktop_file testwebapp
+cd $start_path
+
+result="$(cat webapps/testwebapp-linux-x64/testwebapp.desktop > /dev/null && echo true || echo false)"
+echo $result
+
+rm -r webapps/testwebapp-linux-x64
+[ "$result" == "true" ]
+}
+
+@test "creating a .desktop file, testing if successfully written to" {
+mkdir -p webapps
+mkdir -p webapps/testwebapp-linux-x64
+echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/test_package.json
+
+start_path=$(pwd)
+create_desktop_file testwebapp
+cd $start_path
+
+result="$(cat webapps/testwebapp-linux-x64/testwebapp.desktop | grep testdata > /dev/null && echo true || echo false)"
+echo $result
+
+rm -r webapps/testwebapp-linux-x64
+
+[ "$result" == "true" ]
+}

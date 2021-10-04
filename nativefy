@@ -17,6 +17,7 @@ build_el_version=$(get_build_electron_version $electron_version)
 [ $(is_webpage_up $webaddress) == "false" ] && exit
 echo "Packaging with electron v$build_el_version..."
 
+make_dirs
 
 # execute nativefier command
 node_modules/.bin/nativefier -u $user_agent_str -e $build_el_version -n "$webapp_name" $webaddress $webapps_folder

@@ -11,8 +11,11 @@ echo $(echo $1 | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
 # needs test
 make_dirs() 
 {
+    echo "creating dir $webapps_folder"
     mkdir -p $webapps_folder
+    echo "creating dir $user_path_directory"
     mkdir -p $user_path_directory
+    echo "creating dir $user_appliations_directory"
     mkdir -p $user_appliations_directory
 }
 

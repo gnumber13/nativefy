@@ -8,6 +8,14 @@ to_lower_and_snake_case()
 echo $(echo $1 | tr ' ' '_' | tr '[:upper:]' '[:lower:]')
 }
 
+# needs test
+make_dirs() 
+{
+    mkdir -p $webapps_folder
+    mkdir -p $user_path_directory
+    mkdir -p $user_appliations_directory
+}
+
 get_build_electron_version()
 ## determine electron version to build with ##
 {

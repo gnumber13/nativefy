@@ -4,8 +4,10 @@ Linux Desktop integration for [Nativefier](https://github.com/nativefier/nativef
 
 ## Dependencies
 
+* bash
 * npm
-* nativefier
-* electron (system or via npm)
+  * nativefier
+  * electron (system or via npm)
+* jq
 
 

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # if no arguments are provided exit
 if [ $# -eq 0 ]; then

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source ./nativefy.conf
+. ./nativefy.conf
 
 echo "removing $webapps_folder/$1-linux-*"
 rm -r $webapps_folder/$1-linux-*

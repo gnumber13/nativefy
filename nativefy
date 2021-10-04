@@ -6,8 +6,8 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-source ./units.sh
-source ./nativefy.conf
+. ./units.sh
+. ./nativefy.conf
 
 webaddress=$1
 webapp_display_name=$2

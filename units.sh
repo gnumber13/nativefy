@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source ./nativefy.conf
+. ./nativefy.conf
 
 to_lower_and_snake_case()
 ## convert webapp_name to lower case and replace spaces with underscore ##
@@ -71,13 +71,13 @@ create_desktop_file(){
     ## creates desktop file for newly created webapp, takes webapp display name (capitalized with spaces if you like) ##    
     webapp_display_name=$1 
     webapp_name=$2
-    app_root=$(pwd)
+    nativefy_root=$(pwd)
 
     echo "$(pwd) <----"
     echo "webapps/"$webapp_name"-linux*"
     cd $webapps_folder/"$webapp_name"-linux* || echo "duplicates detectet"
     echo "$(pwd) <---"
-    cat $app_root/template.desktop > "$webapp_name".desktop
+    cat $nativefy_root/template.desktop > "$webapp_name".desktop
 
     # set variables for the .desktop file
     startup_wm_class=$(get_wm_class resources/app/package.json)

@@ -1,7 +1,7 @@
 #!/usr/bin/env bats
 
-source ./units.sh
-source ./nativefy.conf
+. ./units.sh
+. ./nativefy.conf
 
 @test "to_lower_and_snake_case" {
 result=$(to_lower_and_snake_case "Deutsche Bahn")

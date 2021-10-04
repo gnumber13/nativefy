@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "electron": "^15.1.0",
+    "nativefier": "^45.0.4"
+  }
+}

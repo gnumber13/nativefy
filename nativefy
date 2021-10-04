@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# if no arguments are provided, return usage function
+# if no arguments are provided exit
 if [ $# -eq 0 ]; then
     echo "Please enter a webaddress and a name (Spaces are supported for names)"
     exit 1
@@ -11,20 +11,18 @@ source ./nativefy.conf
 
 webaddress=$1
 webapp_display_name=$2
+webapp_name=$(to_lower_and_snake_case $webapp_display_name)
+build_el_version=$(get_build_electron_version $electron_version)
 
 [ $(is_webpage_up $webaddress) == "false" ] && exit
+echo "Packaging with electron v$build_el_version..."
 
-# determine electron version to build with, sourced from nativefy.conf
-get_build_electron_version $electron_version
-echo "Packaging with electron v$build_el_version"
 
 # execute nativefier command
-webapp_name=$(to_lower_and_snake_case $webapp_display_name)
-nativefier -u $user_agent_str -e $build_el_version -n "$webapp_name" $webaddress $webapps_folder
+node_modules/.bin/nativefier -u $user_agent_str -e $build_el_version -n "$webapp_name" $webaddress $webapps_folder
 
 create_desktop_file $webapp_display_name $webapp_name
 
-# u11 copy .desktop file to desired location
 copy_desktop_file_to_directory $desktop_file ~/.local/share/applications/
 
 #create_symlink_to_user_path $webapp_name $user_path_directory

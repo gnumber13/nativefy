@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ./nativefy.conf
+
 to_lower_and_snake_case()
 ## convert webapp_name to lower case and replace spaces with underscore ##
 {
@@ -38,11 +40,16 @@ is_webpage_up() {
 }
 
 write_to_template() {
+    app_root=$(pwd)
+    cd $webapps_folder/$1-linux-*
+
     desktop_file="$1.desktop"
     echo "Name=$2" >> $desktop_file
     echo "Exec=$3" >> $desktop_file
     echo "Icon=$4" >> $desktop_file
     echo "StartupWMClass=$5" >> $desktop_file
+
+    cd $app_root
 }
 
 get_wm_class(){
@@ -53,12 +60,13 @@ create_desktop_file(){
     ## creates desktop file for newly created webapp, takes webapp display name (capitalized with spaces if you like) ##    
     webapp_display_name=$1 
     webapp_name=$2
+    app_root=$(pwd)
 
     echo "$(pwd) <----"
     echo "webapps/"$webapp_name"-linux*"
-    cd webapps/"$webapp_name"-linux* || echo "duplicates detectet"
+    cd $webapps_folder/"$webapp_name"-linux* || echo "duplicates detectet"
     echo "$(pwd) <---"
-    cat ../../template.desktop > "$webapp_name".desktop
+    cat $app_root/template.desktop > "$webapp_name".desktop
 
     # set variables for the .desktop file
     startup_wm_class=$(get_wm_class resources/app/package.json)

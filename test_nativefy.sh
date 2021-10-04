@@ -1,6 +1,7 @@
 #!/usr/bin/env bats
 
 source ./units.sh
+source ./nativefy.conf
 
 @test "to_lower_and_snake_case" {
 result=$(to_lower_and_snake_case "Deutsche Bahn")
@@ -53,35 +54,27 @@ rm tmp1.json
 }
 
 @test "creating a .desktop file, testing if created" {
-mkdir -p webapps
-mkdir -p webapps/testwebapp-linux-x64
-echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/package.json
-
+mkdir -p $webapps_folder
+mkdir -p $webapps_folder/testwebapp-linux-x64
+echo "{\"name\": \"testdata\"}" > $webapps_folder/testwebapp-linux-x64/package.json
 start_path=$(pwd)
 create_desktop_file "Test Webapp" testwebapp
 cd $start_path
-
-result="$(cat webapps/testwebapp-linux-x64/testwebapp.desktop > /dev/null && echo true || echo false)"
+result="$(cat $webapps_folder/testwebapp-linux-x64/testwebapp.desktop > /dev/null && echo true || echo false)"
 echo $result
-
-rm -r webapps/testwebapp-linux-x64
+rm -r $webapps_folder/testwebapp-linux-x64
 [ "$result" == "true" ]
 }
 
 @test "creating a .desktop file, testing if successfully written to" {
-mkdir -p webapps
-mkdir -p webapps/testwebapp-linux-x64
-echo "{\"name\": \"testdata\"}" > webapps/testwebapp-linux-x64/package.json
-
+mkdir -p $webapps_folder/testwebapp-linux-x64/resources/app
+echo "{\"name\": \"testdata\"}" > $webapps_folder/testwebapp-linux-x64/resources/app/package.json
 start_path=$(pwd)
 create_desktop_file "Test Webapp" testwebapp
 cd $start_path
-
-result="$(cat webapps/testwebapp-linux-x64/testwebapp.desktop | grep testdata > /dev/null && echo true || echo false)"
+result="$(cat $webapps_folder/testwebapp-linux-x64/testwebapp.desktop | grep testdata > /dev/null && echo true || echo false)"
 echo $result
-
-#rm -r webapps/testwebapp-linux-x64
-
+rm -rf $webapps_folder/testwebapp-linux-x64 ~/.local/share/applications/testwebapp.desktop
 [ "$result" == "true" ]
 }
 
